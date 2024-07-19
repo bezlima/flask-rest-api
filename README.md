@@ -198,6 +198,26 @@ deactivate
 
 ---
 
+#### Editar um usuário do sistema
+
+```http
+  PATCH /user/edit/<int:user_id>
+```
+
+| Headers   | Value                                   |
+| :---------- |  :------------------------------------------ |
+| `Authorization` | Bearer  { token }  |
+
+
+| Parâmetro   | Tipo       | Descrição                                   |
+| :---------- | :--------- | :------------------------------------------ |
+| `user_id`      | `int` | **Obrigatório** Enviado via url.  |
+| `email`      | `string` | **Obrigatório**  |
+| `username`      | `string` | **Obrigatório** |
+| `new_password`      | `string` |**Obrigatório**
+
+---
+
 #### Excluir um usuário do sistema
 
 ```http
