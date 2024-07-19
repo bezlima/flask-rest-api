@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flask Rest API Example</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 p-6">
+    <div class="container mx-auto">
+        <h1 class="text-2xl font-bold mb-4">Flask Rest API Example</h1>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- API Status -->
+            <div class="bg-white p-6 rounded shadow">
+                <h2 class="text-xl font-bold mb-4">API Status</h2>
+                <form action="/apistatus" method="GET" class="space-y-4">
+                    <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded">Check API Status</button>
+                </form>
+            </div>
+            <div class="bg-white p-6 rounded shadow">
+                <h2 class="text-xl font-bold mb-4">Output</h2>
+                <div id="apistatus-result" class='break-all'></div>
+            </div>
+
+            <!-- Login -->
+            <div class="bg-white p-6 rounded shadow">
+                <h2 class="text-xl font-bold mb-4">Login</h2>
+                <form id="login-form" class="space-y-4" onsubmit="event.preventDefault(); login();">
+                    <div>
+                        <label for="username" class="block">Username:</label>
+                        <input type="text" id="username" name="username" required class="w-full border border-gray-300 p-2 rounded">
+                    </div>
+                    <div>
+                        <label for="password" class="block">Password:</label>
+                        <input type="password" id="password" name="password" required class="w-full border border-gray-300 p-2 rounded">
+                    </div>
+                    <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded">Login</button>
+                </form>
+            </div>
+            <div class="bg-white p-6 rounded shadow">
+                <h2 class="text-xl font-bold mb-4">Output</h2>
+                <div class='break-all'> Token: </div>
+                <div id="login-result" class='break-all'></div>
+                <button onclick="copyToken('login-result')" class="bg-gray-300 text-gray-800 py-1 px-2 rounded">copy Token</button>
+            </div>
+
+            <!-- Register -->
+            <div class="bg-white p-6 rounded shadow">
+                <h2 class="text-xl font-bold mb-4">Register</h2>
+                <form id="register-form" class="space-y-4" onsubmit="event.preventDefault(); register();">
+                    <div>
+                        <label for="reg-username" class="block">Username:</label>
+                        <input type="text" id="reg-username" name="username" required class="w-full border border-gray-300 p-2 rounded">
+                    </div>
+                    <div>
+                        <label for="reg-email" class="block">Email:</label>
+                        <input type="email" id="reg-email" name="email" required class="w-full border border-gray-300 p-2 rounded">
+                    </div>
+                    <div>
+                        <label for="reg-password" class="block">Password:</label>
+                        <input type="password" id="reg-password" name="password" required class="w-full border border-gray-300 p-2 rounded">
+                    </div>
+                    <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded">Register</button>
+                </form>
+            </div>
+            <div class="bg-white p-6 rounded shadow">
+                <h2 class="text-xl font-bold mb-4">Output</h2>
+                <div id="register-result" class='break-all'></div>
+            </div>
+
+            <!-- Get User -->
+            <div class="bg-white p-6 rounded shadow">
+                <h2 class="text-xl font-bold mb-4">Get User</h2>
+                <form id="get-user-form" class="space-y-4" onsubmit="event.preventDefault(); getUser();">
+                    <div>
+                        <label for="get-user-id" class="block">User ID:</label>
+                        <input type="number" id="get-user-id" name="user_id" required class="w-full border border-gray-300 p-2 rounded">
+                    </div>
+                    <div>
+                        <label for="get-token" class="block">JWT Token:</label>
+                        <input type="text" id="get-token" name="token" required class="w-full border border-gray-300 p-2 rounded">
+                    </div>
+                    <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded">Get User</button>
+                </form>
+            </div>
+            <div class="bg-white p-6 rounded shadow">
+                <h2 class="text-xl font-bold mb-4">Output</h2>
+                <div id="get-user-result" class='break-all'></div>
+            </div>
+
+            <!-- Edit User -->
+            <div class="bg-white p-6 rounded shadow">
+                <h2 class="text-xl font-bold mb-4">Edit User</h2>
+                <form id="edit-user-form" class="space-y-4" onsubmit="event.preventDefault(); editUser();">
+                    <div>
+                        <label for="edit-user-id" class="block">User ID:</label>
+                        <input type="number" id="edit-user-id" name="user_id" required class="w-full border border-gray-300 p-2 rounded">
+                    </div>
+                    <div>
+                        <label for="edit-email" class="block">Email:</label>
+                        <input type="email" id="edit-email" name="email" required class="w-full border border-gray-300 p-2 rounded">
+                    </div>
+                    <div>
+                        <label for="edit-username" class="block">Username:</label>
+                        <input type="text" id="edit-username" name="username" required class="w-full border border-gray-300 p-2 rounded">
+                    </div>
+                    <div>
+                        <label for="edit-password" class="block">New Password:</label>
+                        <input type="password" id="edit-password" name="password" required class="w-full border border-gray-300 p-2 rounded">
+                    </div>
+                    <div>
+                        <label for="edit-token" class="block">JWT Token:</label>
+                        <input type="text" id="edit-token" name="token" required class="w-full border border-gray-300 p-2 rounded">
+                    </div>
+                    <button type="submit" class="w-full bg-yellow-500 text-white py-2 rounded">Edit User</button>
+                </form>
+            </div>
+            <div class="bg-white p-6 rounded shadow">
+                <h2 class="text-xl font-bold mb-4">Output</h2>
+                <div id="edit-user-result" class='break-all'></div>
+            </div>
+
+            <!-- Delete User -->
+            <div class="bg-white p-6 rounded shadow">
+                <h2 class="text-xl font-bold mb-4">Delete User</h2>
+                <form id="delete-user-form" class="space-y-4" onsubmit="event.preventDefault(); deleteUser();">
+                    <div>
+                        <label for="delete-user-id" class="block">User ID:</label>
+                        <input type="number" id="delete-user-id" name="user_id" required class="w-full border border-gray-300 p-2 rounded">
+                    </div>
+                    <div>
+                        <label for="delete-token" class="block">JWT Token:</label>
+                        <input type="text" id="delete-token" name="token" required class="w-full border border-gray-300 p-2 rounded">
+                    </div>
+                    <button type="submit" class="w-full bg-red-500 text-white py-2 rounded">Delete User</button>
+                </form>
+            </div>
+            <div class="bg-white p-6 rounded shadow">
+                <h2 class="text-xl font-bold mb-4">Output</h2>
+                <div id="delete-user-result" class='break-all'></div>
+            </div>
+
+            <!-- List Users -->
+            <div class="bg-white p-6 rounded shadow">
+                <h2 class="text-xl font-bold mb-4">List Users</h2>
+                <form id="list-users-form" class="space-y-4" onsubmit="event.preventDefault(); listUsers();">
+                    <div>
+                        <label for="list-token" class="block">JWT Token:</label>
+                        <input type="text" id="list-token" name="token" required class="w-full border border-gray-300 p-2 rounded">
+                    </div>
+                    <button type="submit" class="w-full bg-green-500 text-white py-2 rounded">List Users</button>
+                </form>
+            </div>
+            <div class="bg-white p-6 rounded shadow">
+                <h2 class="text-xl font-bold mb-4">Output</h2>
+                <div id="list-users-result" class='break-all'></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            const response = await fetch('/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username, password })
+            });
+
+            const data = await response.json();
+            document.getElementById('login-result').innerText = `${data.token}`;
+        }
+
+        async function register() {
+            const username = document.getElementById('reg-username').value;
+            const email = document.getElementById('reg-email').value;
+            const password = document.getElementById('reg-password').value;
+
+            const response = await fetch('/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username, email, password })
+            });
+
+            const result = await response.text();
+            document.getElementById('register-result').innerText = result;
+        }
+
+        async function getUser() {
+            const userId = document.getElementById('get-user-id').value;
+            const token = document.getElementById('get-token').value;
+
+            const response = await fetch(`/get_user/${userId}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            const data = await response.json();
+            document.getElementById('get-user-result').innerText = JSON.stringify(data);
+        }
+
+        async function editUser() {
+            const userId = document.getElementById('edit-user-id').value;
+            const email = document.getElementById('edit-email').value;
+            const username = document.getElementById('edit-username').value;
+            const newPassword = document.getElementById('edit-password').value;
+            const token = document.getElementById('edit-token').value;
+
+            const response = await fetch(`/user/edit/${userId}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ email, username, password: newPassword })
+            });
+
+            const result = await response.json();
+            document.getElementById('edit-user-result').innerText = JSON.stringify(result);
+        }
+
+        async function deleteUser() {
+            const userId = document.getElementById('delete-user-id').value;
+            const token = document.getElementById('delete-token').value;
+
+            const response = await fetch(`/user/${userId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            const result = await response.json();
+            document.getElementById('delete-user-result').innerText = JSON.stringify(result);
+        }
+
+        async function listUsers() {
+            const token = document.getElementById('list-token').value;
+
+            const response = await fetch('/users', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            const data = await response.json();
+            document.getElementById('list-users-result').innerText = JSON.stringify(data);
+        }
+
+        document.querySelector('form[action="/apistatus"]').addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const response = await fetch('/apistatus', {
+                method: 'GET'
+            });
+
+            const result = await response.text();
+            document.getElementById('apistatus-result').innerText = result;
+        });
+
+        function copyToken(elementId) {
+            const tokenText = document.getElementById(elementId).innerText;
+            navigator.clipboard.writeText(tokenText).then(() => {
+                alert('Token copiado para a área de transferência!');
+            }, () => {
+                alert('Falha ao copiar o token.');
+            });
+        }
+    </script>
+</body>
+</html>
