@@ -127,9 +127,6 @@ deactivate
 | Nenhum | - | Essa rota não requer parâmetros na requisição. |
 
 ---
----
----
----
 
 #### Retorna o status da API e informações do servidor
 
@@ -141,9 +138,6 @@ deactivate
 | :---------- | :--------- | :---------------------------------- |
 | Nenhum | - | Essa rota não requer parâmetros na requisição. |
 
----
----
----
 ---
 
 #### Login de usuário
@@ -159,9 +153,6 @@ deactivate
 
 
 ---
----
----
----
 
 #### Registrar usuário
 
@@ -176,9 +167,6 @@ deactivate
 | `password`      | `string` | **Obrigatório**.  |
 
 ---
----
----
----
 
 #### Visualizar usuários do sistema
 
@@ -191,9 +179,6 @@ deactivate
 | `Authorization` | Bearer  { token }  |
 
 
----
----
----
 ---
 
 #### Visualizar um usuário do sistema
@@ -211,9 +196,6 @@ deactivate
 | :---------- | :--------- | :------------------------------------------ |
 | `user_id`      | `int` | **Obrigatório** Enviado via url.  |
 
----
----
----
 ---
 
 #### Excluir um usuário do sistema
